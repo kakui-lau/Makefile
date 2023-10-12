@@ -1,0 +1,43 @@
+# Makefile for Installing Docker on AWS EC2 (Amazon Linux 2)
+
+# 默认目标
+.DEFAULT_GOAL := help
+
+# 安装Docker
+install-docker:
+	@echo "Installing Docker on Amazon Linux 2..."
+	# 安装所需的软件包以配置Docker存储库
+	sudo yum install -y amazon-linux-extras
+	# 启用Docker存储库
+	sudo amazon-linux-extras enable docker
+	# 安装Docker
+	sudo yum install -y docker
+	# 启动Docker守护进程
+	sudo service docker start
+	# 将ec2-user添加到docker组，以便无需sudo访问docker命令
+	sudo usermod -a -G docker ec2-user
+	@echo "Docker installation complete. Please log out and log back in for group membership changes to take effect."
+
+# 启动Docker守护进程
+start-docker:
+	sudo service docker start
+	@echo "Docker service started."
+
+# 停止Docker守护进程
+stop-docker:
+	sudo service docker stop
+	@echo "Docker service stopped."
+
+# 重启Docker守护进程
+restart-docker:
+	sudo service docker restart
+	@echo "Docker service restarted."
+
+# 帮助信息
+help:
+	@echo "Available targets:"
+	@echo "  install-docker  - Install Docker on Amazon Linux 2"
+	@echo "  start-docker    - Start Docker service"
+	@echo "  stop-docker     - Stop Docker service"
+	@echo "  restart-docker  - Restart Docker service"
+	@echo "  help            - Show this help message"
